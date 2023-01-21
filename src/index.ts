@@ -17,11 +17,11 @@ const init = () => {
   if (!tabsContent) return;
   const videos = tabsContent.querySelectorAll("video");
   if (!videos) return;
-  const loaders = tabsMenu.querySelectorAll('.loader');
+  const loaders = tabsMenu.querySelectorAll(".loader");
 
   // fix for safari scrolling to tab on focus
   if (navigator.userAgent.includes("Safari")) {
-    let tabLinks = tabsMenu.childNodes as NodeListOf<HTMLAnchorElement>
+    let tabLinks = tabsMenu.childNodes as NodeListOf<HTMLAnchorElement>;
     tabLinks.forEach(
       (tabLink) =>
         (tabLink.focus = function () {
@@ -54,7 +54,7 @@ const init = () => {
 
     if (tween) {
       tween.progress(0);
-      tween.kill()
+      tween.kill();
     }
 
     if (loaders.length > 0) {
@@ -104,4 +104,4 @@ const init = () => {
   observer.observe(tabsComponent, config);
 };
 
-document.addEventListener("DOMContentLoaded", init);
+window.addEventListener("load", init);

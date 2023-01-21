@@ -4221,7 +4221,7 @@
     const observer = new MutationObserver(callback);
     observer.observe(tabsComponent, config3);
   };
-  document.addEventListener("DOMContentLoaded", init4);
+  window.addEventListener("load", init4);
 })();
 /*!
  * CSSPlugin 3.11.3
