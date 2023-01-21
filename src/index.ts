@@ -19,6 +19,24 @@ const init = () => {
   if (!videos) return;
   const loaders = tabsMenu.querySelectorAll('.loader');
 
+  // fix for safari scrolling to tab on focus
+  if (navigator.userAgent.includes("Safari")) {
+    let tabLinks = tabsMenu.childNodes as NodeListOf<HTMLAnchorElement>
+    tabLinks.forEach(
+      (tabLink) =>
+        (tabLink.focus = function () {
+          const x = window.scrollX,
+            y = window.scrollY;
+          const f = () => {
+            setTimeout(() => window.scrollTo(x, y), 1);
+            tabLink.removeEventListener("focus", f);
+          };
+          tabLink.addEventListener("focus", f);
+          HTMLElement.prototype.focus.apply(this, arguments);
+        })
+    );
+  }
+
   const animateLoader = (duration) => {
     tween = gsap.fromTo(
       loaders[activeIndex],
@@ -35,8 +53,8 @@ const init = () => {
     activeVideo.currentTime = 0;
 
     if (tween) {
-        tween.progress(0);
-        tween.kill()
+      tween.progress(0);
+      tween.kill()
     }
 
     if (loaders.length > 0) {
@@ -58,7 +76,7 @@ const init = () => {
   autoPlayTabs();
 
   // Options for the observer (which mutations to observe)
-  const config: MutationObserverInit = {
+  const config = {
     attributes: true,
     subtree: true,
     attributeFilter: ["class"],
@@ -68,7 +86,7 @@ const init = () => {
   const callback = (mutationList, observer) => {
     for (const mutation of mutationList) {
       if (mutation.type === "attributes") {
-        const target: HTMLDivElement | HTMLAnchorElement = mutation.target;
+        const target = mutation.target;
         if (target.classList.contains(ACTIVE_TAB)) {
           activeIndex = parseInt(target.id.slice(-1), 10);
           console.log({ activeIndex });

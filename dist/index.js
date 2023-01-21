@@ -4156,6 +4156,20 @@
     if (!videos)
       return;
     const loaders = tabsMenu.querySelectorAll(".loader");
+    if (navigator.userAgent.includes("Safari")) {
+      let tabLinks = tabsMenu.childNodes;
+      tabLinks.forEach(
+        (tabLink) => tabLink.focus = function() {
+          const x = window.scrollX, y = window.scrollY;
+          const f = () => {
+            setTimeout(() => window.scrollTo(x, y), 1);
+            tabLink.removeEventListener("focus", f);
+          };
+          tabLink.addEventListener("focus", f);
+          HTMLElement.prototype.focus.apply(this, arguments);
+        }
+      );
+    }
     const animateLoader = (duration) => {
       tween = gsapWithCSS.fromTo(
         loaders[activeIndex],
